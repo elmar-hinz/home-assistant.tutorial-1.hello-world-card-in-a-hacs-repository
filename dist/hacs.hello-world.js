@@ -4,28 +4,29 @@ class HelloWorldCard extends HTMLElement {
     content;
 
     set hass(hass) {
+        const entityId = this.config.entity;
+        const state = hass.states[entityId];
+        const stateStr = state ? state.state : 'unavailable';
+
+        // done once
         if (!this.content) {
+            // user makes sense here as every login gets it's own instance
             this.innerHTML = `
-                <ha-card header="Hello!">
+                <ha-card header="Hello ${hass.user.name}!">
                     <div class="card-content"></div>
                 </ha-card>
             `;
             this.content = this.querySelector('div');
         }
-        const entityId = this.config.entity;
-        const state = hass.states[entityId];
-        const stateStr = state ? state.state : 'unavailable';
-
+        // done repeatedly
         this.content.innerHTML = `
-            The state of ${entityId} is ${stateStr}.
-            <br><br>
-            <img src="http://via.placeholder.com/350x150">
+            <p>The ${entityId} is ${stateStr}.</p>
         `;
     }
 
     setConfig(config) {
         if (!config.entity) {
-            throw new Error('You need to define an entity');
+            throw new Error('Please define an entity!');
         }
         this.config = config;
     }
