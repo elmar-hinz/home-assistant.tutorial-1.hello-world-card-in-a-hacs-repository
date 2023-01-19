@@ -1,4 +1,4 @@
-# Tutorial: Hello World Card
+# Tutorial 1: Hello World Card
 
 ## Get started with Home Assistant custom cards and HACS custom repositories!
 
@@ -13,7 +13,7 @@ own instance. You can play around end test the whole development cycle with it.
 On the [repositories home page on
 Github](https://github.com/elmar-hinz/home-assistant.tutorial-1.hello-world-card-in-a-hacs-repository)
 there is a bright green button _"Use this templeate"_ to create your own
-instance of the repository.
+instance of the repository. (You have to be logged in into Github for this.)
 
 You may also use this approach to get a very simple boilerplate card.
 
@@ -32,7 +32,7 @@ as category. Click _"ADD"_.
 
 ### Download the repository
 
-The new repository should show up hightlighted as _"New repository"_. Select it
+The new repository should show up highlighted as _"New repository"_. Select it
 and click the _"DOWNLOAD"_ button in the lower right hand corner. If it doesn't
 show up, use the button _"+ EXPLORE & DOWNLOAD REPOSITORIES"_ in the lower right
 hand corner to search for it. Follow along the prompts. You now find the
@@ -41,10 +41,8 @@ installed repository in the _"Frontend"_ tab.
 ### Check the card is a dashboard resource
 
 Go to _"Settings > Dashboards"_ and click the the three dots in the upper right
-hand corner to opmen _"Resources"_. You should find an entry similar to
-`/hacsfiles/hacs.hello-world-card-tutorial/card.js?hacstag=590046610584`. If
-everything went well and you should be able to find the card while editing the
-dashboard.
+hand corner to open _"Resources"_. You should find an entry similar to
+`/hacsfiles/<YOUR-REPO-NAME-HERE>/card.js?hacstag=1234567890`.
 
 ### Edit the dashboard
 
@@ -64,6 +62,22 @@ single concern, and takes care to install them into the appropriate corners of
 the Home Assistant configuration.
 
 ### Development environment
+
+Overview of our approach:
+
+* Use the Docker core development container.
+    - It is most likely up-to-date.
+* Use VS Code to run it
+    - That's the documented approach for this container.
+    - It is widley spread.
+    - It can log in into the container.
+* Mount your repository from your harddisk.
+    - In addition to VS Code you can use your local tool chain.
+    - Your repository is also availble, when the container is stopped.
+* More specific mount a local directory with your cards' repos to `config/www/dev`.
+    - That is well tailored.
+    - There is no need to create a new mount per card repository.
+    - `www/dev` lives side-by-side with HACS's `www/community`.
 
 ### Hello HACS
 
