@@ -12,7 +12,7 @@ class HelloWorldCard extends HTMLElement {
         if (!this.content) {
             // user makes sense here as every login gets it's own instance
             this.innerHTML = `
-                <ha-card header="Hello ${hass.user.name} from hacs.hello-world.js!">
+                <ha-card header="Hello ${hass.user.name} from card.js">
                     <div class="card-content"></div>
                 </ha-card>
             `;
