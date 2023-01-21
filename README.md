@@ -4,7 +4,9 @@
 
 This tutorial is based upon a fully runnable hello world example displaying the
 minimal requirements and the integration of both of them. Please understand
-minimal as a reasonable minimum to get started, not as the absolute minimum.
+minimal as a reasonable minimum to get started, not as the absolute minimum. You
+find the runnable files, that are subject of this tutorial, in the same
+directory as this README. Please open them alongside.
 
 ## Use this repository as a templalte to create your own instance
 
@@ -50,7 +52,7 @@ TODO
 
 ## Tutorial
 
-### Why HACS?
+### What the HACS?
 
 Home Assistant is still missing a package format to organise your setup by
 concerns. You could commit your whole `config/` directory into a private git
@@ -79,9 +81,91 @@ Overview of our approach:
     - There is no need to create a new mount per card repository.
     - `www/dev` lives side-by-side with HACS's `www/community`.
 
-### Hello HACS
+### Hello HACSs
+
+```json
+{
+  "name": "Hello World Card",
+  "render_readme": true,
+  "content_in_root": true,
+  "filename": "card.js"
+}
+````
+
+The `name` is the name displayed in the HACS store. Setting the capitals to
+uppercase gives it a nice header style. Most cards take this choice.
+
+The `render_readme` setting makes this README.md show up not only as the
+homepage of the Github repository, but also as the homepage in the HACS store.
+If we don't set this, we have to provide a file `info.md` in addition for the store. Too much overhead for a hello world example.
+
+The `content_in_root` setting tells HACS not to expect our card in the default
+location of a `dist/` directory. Such a directory makes sense, when the files in
+the `dist/` directory are generated from files in a source directory. That is typically `src/`.
+
+The `filename` setting tells HACS wich of all possible files to connect as the
+entrypoint, when configuring the package as a dashbaord resource. The name
+defaults to the directory name of the git repository, which would be pretty long
+in our case. We want something short. `entrypoint.js` would be a very
+descriptive name, if we ship multiple files.
 
 ### Hello card
+
+#### Configuration
+
+While setting up your card in the dashboard `setConfig()` gets triggered upon
+edit with the configuration data. You consume it to set up the internal
+configuration of the object. You may want to validate the data, too.
+
+```js
+setConfig(config) {
+    if (!config.entity) {
+        throw new Error('Please define an entity!');
+    }
+    this.config = config;
+}
+```
+
+Our card requires an entity. If it is missing, the method throws an error. It
+will be catched to be displayed in a friendly format to guide the user.
+
+#### View
+
+```js
+set hass(hass) {
+    const entityId = this.config.entity;
+    const state = hass.states[entityId];
+    const stateStr = state ? state.state : 'unavailable';
+```
+
+The `hass()` setter gets triggered, when the state of the hass object is
+changing. First we extract the information of our interest into constants,
+to prepare them for the output.
+
+```js
+if (!this.content) {
+    this.innerHTML = `
+        <ha-card header="Hello ${hass.user.name}!">
+            <div class="card-content"></div>
+        </ha-card>
+    `;
+    this.content = this.querySelector('div');
+}
+```
+
+The HTML enclosure of the card (including the header) gets setup once. It does
+not change. Nonetheless we can use the user name here. There is a new instance
+per login. The inner `<div>` as a placeholder gets assingend to the content
+variable.
+
+```js
+this.content.innerHTML = `
+    <p>The ${entityId} is ${stateStr}.</p>
+`;
+```
+
+Only the dynamic node is updated upon each call to minimise changes of the DOM
+tree.
 
 ## Beyond
 

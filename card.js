@@ -3,6 +3,13 @@ class HelloWorldCard extends HTMLElement {
     config;
     content;
 
+    setConfig(config) {
+        if (!config.entity) {
+            throw new Error('Please define an entity!');
+        }
+        this.config = config;
+    }
+
     set hass(hass) {
         const entityId = this.config.entity;
         const state = hass.states[entityId];
@@ -22,13 +29,6 @@ class HelloWorldCard extends HTMLElement {
         this.content.innerHTML = `
             <p>The ${entityId} is ${stateStr}.</p>
         `;
-    }
-
-    setConfig(config) {
-        if (!config.entity) {
-            throw new Error('Please define an entity!');
-        }
-        this.config = config;
     }
 
 }
